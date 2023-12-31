@@ -12,5 +12,20 @@ provider "proxmox" {
   insecure = true
   ssh {
     agent = true
+
+    node {
+      name    = "pve"
+      address = "172.16.0.10"
+    }
+
+    node {
+      name    = "pve2"
+      address = "172.16.0.11"
+    }
+
+    node {
+      name    = "pve3"
+      address = "172.16.0.12"
+    }
   }
 }
