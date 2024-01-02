@@ -1,5 +1,6 @@
 locals {
-  general_pool = "GenPurpose-Ceph-Pool"
+  general_pool = "VM-Storage-Pool"
+  local_lvm    = "local-lvm"
 
   nodes = {
     pve = {
