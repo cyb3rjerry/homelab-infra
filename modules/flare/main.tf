@@ -1,5 +1,9 @@
+module "base_infra" {
+  source = "../base_infra"
+}
+
 resource "proxmox_virtual_environment_vm" "flare" {
-  node_name = data.proxmox_virtual_environment_hosts.pve2.node_name
+  node_name = module.base_infra.nodes.pve2.node_name
   name      = "flare"
   tags      = ["terraform", "windows", "malware"]
   vm_id     = 1337
@@ -7,7 +11,7 @@ resource "proxmox_virtual_environment_vm" "flare" {
   started = false // this way TF doesn't hang waiting on windows to boot
 
   clone {
-    vm_id = data.proxmox_virtual_environment_vm.flare_template.id
+    vm_id = module.base_infra.templates.flare_template.id
     full  = false
   }
 
@@ -16,7 +20,7 @@ resource "proxmox_virtual_environment_vm" "flare" {
   }
 
   disk {
-    datastore_id = local.general_pool
+    datastore_id = module.base_infra.pools.VM_Storage_pool
     interface    = "scsi0"
     size         = 200
     file_format  = "raw"
@@ -38,7 +42,7 @@ resource "proxmox_virtual_environment_vm" "flare" {
 
   cdrom {
     enabled   = false // set to true on initial install
-    file_id   = proxmox_virtual_environment_file.windows-10-22H2.id
+    file_id   = module.base_infra.isos.Win10.id
     interface = "ide0"
   }
 
